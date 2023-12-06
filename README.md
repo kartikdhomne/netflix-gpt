@@ -3,8 +3,14 @@
 - Getting Started with Create React App
 - Configured tailwind.css in project directory
 - Build Header
+- Routing
 - Create Login Form
 - Create Sign Up Form
+- Form Validation
+- UseRef hook
+- Firebase Setup
+- Deploy app to production
+- Create Signup user account
 
 # Features
 
