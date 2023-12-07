@@ -68,7 +68,7 @@ const Login = () => {
       // Customize error messages based on error code
       if (errorCode === "auth/invalid-credential") {
         errorMessage =
-          "Invalid credentials. Please check your email and password.";
+          "User not found, please sign up and try again.";
       } else {
         // Handle other error cases or use the default message
         errorMessage += "-" + errorCode;
