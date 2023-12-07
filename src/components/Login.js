@@ -5,59 +5,76 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 import { auth } from "../utils/firebase";
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
+  const navigate = useNavigate();
+  // const dispatch = useDispatch();
 
-  const email = useRef("");
-  const password = useRef("");
-  const name = useRef("");
-  const handleButtonClick = () => {
+  const email = useRef(null);
+  const password = useRef(null);
+  const name = useRef(null);
+
+  const handleButtonClick = async () => {
+    const emailValue = email.current?.value;
+    const passwordValue = password.current?.value;
     const message = checkValidData(
-      email.current.value,
-      password.current.value,
-      name.current.value
+      emailValue,
+      passwordValue,
+      name.current?.value
     );
     setErrorMessage(message);
 
     if (message) return;
 
-    if (!isSignInForm) {
-      //Sign Up Logic
-      createUserWithEmailAndPassword(
-        auth,
-        email.current.value,
-        password.current.value
-      )
-        .then((userCredential) => {
-          // Signed up
-          const user = userCredential.user;
-          console.log(user);
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          setErrorMessage(errorMessage + "-" + errorCode);
-        });
-    } else {
-      //Sign In Logic
-      signInWithEmailAndPassword(
-        auth,
-        email.current.value,
-        password.current.value
-      )
-        .then((userCredential) => {
-          // Signed in
-          const user = userCredential.user;
-          console.log(user);
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          setErrorMessage(errorMessage + "-" + errorCode);
-        });
+    try {
+      if (!isSignInForm) {
+        // Sign Up Logic
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          emailValue,
+          passwordValue
+        );
+
+        const user = userCredential.user;
+        console.log(user);
+        // dispatch(
+        //   addUser({ uid: user.uid, email: user.email, password: passwordValue })
+        // );
+
+        // Redirect to Sign In after successful Sign Up
+        setIsSignInForm(true);
+      } else {
+        // Sign In Logic
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          emailValue,
+          passwordValue
+        );
+
+        const user = userCredential.user;
+        console.log(user);
+
+        // Redirect to Browse after successful Sign In
+        navigate("/browse");
+      }
+    } catch (error) {
+      const errorCode = error.code;
+      let errorMessage = error.message;
+
+      // Customize error messages based on error code
+      if (errorCode === "auth/invalid-credential") {
+        errorMessage =
+          "Invalid credentials. Please check your email and password.";
+      } else {
+        // Handle other error cases or use the default message
+        errorMessage += "-" + errorCode;
+      }
+
+      setErrorMessage(errorMessage);
     }
   };
 
