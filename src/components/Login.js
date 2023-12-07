@@ -4,15 +4,18 @@ import { checkValidData } from "../utils/validate";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../utils/firebase";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const email = useRef(null);
   const password = useRef(null);
@@ -40,6 +43,23 @@ const Login = () => {
         );
 
         const user = userCredential.user;
+
+        updateProfile(user, {
+          displayName: name.current.value,
+          photoURL: "https://avatars.githubusercontent.com/u/92445043?v=4",
+        })
+          .then(() => {
+            // Profile updated!
+            const { uid, email, password, displayName, photoURL } = auth.currentUser;
+            dispatch(addUser({ uid, email, password, displayName, photoURL }));
+
+            navigate("/browse");
+          })
+          .catch((error) => {
+            // An error occurred
+            setErrorMessage(error.message);
+          });
+
         console.log(user);
         // dispatch(
         //   addUser({ uid: user.uid, email: user.email, password: passwordValue })
@@ -67,8 +87,7 @@ const Login = () => {
 
       // Customize error messages based on error code
       if (errorCode === "auth/invalid-credential") {
-        errorMessage =
-          "User not found, please sign up and try again.";
+        errorMessage = "User not found, please sign up and try again.";
       } else {
         // Handle other error cases or use the default message
         errorMessage += "-" + errorCode;
