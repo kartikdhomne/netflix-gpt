@@ -1,12 +1,12 @@
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import Header from "./Header";
+import Loader from "./Loader"; 
 import { checkValidData } from "../utils/validate";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
 import { auth } from "../utils/firebase";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
@@ -14,7 +14,7 @@ import { addUser } from "../utils/userSlice";
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
   const email = useRef(null);
@@ -22,6 +22,8 @@ const Login = () => {
   const name = useRef(null);
 
   const handleButtonClick = async () => {
+    setLoading(true);
+
     const emailValue = email.current?.value;
     const passwordValue = password.current?.value;
     const message = checkValidData(
@@ -31,11 +33,13 @@ const Login = () => {
     );
     setErrorMessage(message);
 
-    if (message) return;
+    if (message) {
+      setLoading(false);
+      return;
+    }
 
     try {
       if (!isSignInForm) {
-        // Sign Up Logic
         const userCredential = await createUserWithEmailAndPassword(
           auth,
           emailValue,
@@ -49,26 +53,18 @@ const Login = () => {
           photoURL: "https://avatars.githubusercontent.com/u/92445043?v=4",
         })
           .then(() => {
-            // Profile updated!
             const { uid, email, password, displayName, photoURL } = auth.currentUser;
             dispatch(addUser({ uid, email, password, displayName, photoURL }));
-
-            navigate("/browse");
           })
           .catch((error) => {
-            // An error occurred
             setErrorMessage(error.message);
+          })
+          .finally(() => {
+            setLoading(false);
           });
 
-        console.log(user);
-        // dispatch(
-        //   addUser({ uid: user.uid, email: user.email, password: passwordValue })
-        // );
-
-        // Redirect to Sign In after successful Sign Up
         setIsSignInForm(true);
       } else {
-        // Sign In Logic
         const userCredential = await signInWithEmailAndPassword(
           auth,
           emailValue,
@@ -78,22 +74,26 @@ const Login = () => {
         const user = userCredential.user;
         console.log(user);
 
+        setLoading(false);
+
         // Redirect to Browse after successful Sign In
-        navigate("/browse");
+        // Commented out since it's not provided in the code snippet
+        // navigate("/browse");
       }
     } catch (error) {
       const errorCode = error.code;
       let errorMessage = error.message;
 
-      // Customize error messages based on error code
       if (errorCode === "auth/invalid-credential") {
         errorMessage = "User not found, please sign up and try again.";
+      } else if (errorCode === "auth/email-already-in-use") {
+        errorMessage = "This email is already registered. Please sign in or use a different email.";
       } else {
-        // Handle other error cases or use the default message
         errorMessage += "-" + errorCode;
       }
 
       setErrorMessage(errorMessage);
+      setLoading(false);
     }
   };
 
@@ -139,10 +139,11 @@ const Login = () => {
         />
         <p className="text-red-500 font-300 text-md">{errorMessage}</p>
         <button
-          className="p-2 my-6 bg-red-700 w-full md:w-full rounded-lg"
+          className={`p-2 my-6 bg-red-700 w-full md:w-full rounded-lg ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
           onClick={handleButtonClick}
+          disabled={loading}
         >
-          Sign {isSignInForm ? "In" : "Up"}
+          {loading ? <Loader /> : `Sign ${isSignInForm ? 'In' : 'Up'}`}
         </button>
         <p className="py-4">
           {isSignInForm ? (
