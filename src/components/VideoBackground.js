@@ -17,4 +17,4 @@ const VideoBackground = () => {
   )
 }
 
-export default VideoBackground
+export default VideoBackground;
