@@ -8,18 +8,20 @@ const MainContainer = () => {
   if (!movies) return; //early return (movies == null)
 
   const mainMovie = movies[0];
-  console.log(mainMovie);
 
-  const { original_title, overview } = mainMovie;
+  const { original_title, overview, id } = mainMovie;
 
   return (
-    <div className="relative h-screen">
-  <VideoBackground />
-  <div className="absolute inset-0 flex items-center justify-center">
-    <VideoTitle className="relative" title={original_title} overview={overview} />
-  </div>
-</div>
-
+    <div className="relative">
+      <VideoBackground movieId={id}/>
+      <div className=" inset-0 flex items-center justify-center">
+        <VideoTitle
+          className="relative"
+          title={original_title}
+          overview={overview}
+        />
+      </div>
+    </div>
   );
 };
 

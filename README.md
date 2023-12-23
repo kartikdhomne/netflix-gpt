@@ -21,6 +21,14 @@
 - Unsubsribe to onAuthStateChanges callback
 - Register TMDB API & create an application & get access token
 - Get Data from TMDB now playing movies list API 
+- Custom Hook for noew playing movies
+- Create movieSlice
+- Update Store with movie Data
+- Planning for main and secondary containers
+- Fetch data for Trailer videos
+- Update Store with Trailer video Data
+- Embedded youtube video and make it autoplay & mute
+- Tailwind Classes to make Main container awesome
 
 
 - <React.StrictMode> -- Makes 2 api calls at once to check inconsistency during API calls

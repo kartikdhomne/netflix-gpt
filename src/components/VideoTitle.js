@@ -2,15 +2,15 @@ import React from "react";
 
 const VideoTitle = ({ title, overview }) => {
   return (
-    <div className="pt-36 px-12">
-      <h1 className="text-6xl text-white font-bold">{title}</h1>
-      <p className="py-6 text-lg text-white w-1/4">{overview}</p>
+    <div className="w-screen aspect-video pt-[12%] top-0 bg-gradient-to-r from-black px-24 absolute">
+      <h1 className="text-6xl text-white font-bold w-40">{title}</h1>
+      <p className="py-6 text-lg text-white w-35">{overview}</p>
       <div className="flex">
-        <button className="flex bg-gray-500 text-black p-4 px-14 text-xl bg-opacity-50 rounded-lg">
+        <button className="flex bg-white justify-center text-black p-4 mr-4 px-12 text-xl rounded-lg hover:bg-opacity-80">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="48"
-            height="36"
+            height="32"
             viewBox="0 0 48 48"
             id="play"
           >
@@ -18,11 +18,11 @@ const VideoTitle = ({ title, overview }) => {
           </svg>{" "}
           Play
         </button>
-        <button className="flex mx-2 bg-gray-500 text-white p-4 px-12 text-xl bg-opacity-50 rounded-lg">
+        <button className="flex mx-2 bg-gray-500 text-white p-4 px-8 text-xl bg-opacity-50 rounded-lg hover:bg-opacity-40">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="48"
-            height="36"
+            height="32"
             viewBox="0 0 16 16"
             id="info"
           >
