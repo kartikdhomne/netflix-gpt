@@ -10,3 +10,5 @@ export const LOGO = "https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897
     Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiMzZkZTFjZTIwOWZjNTUwMjM0ZWM4MmZiODg4ODBmYSIsInN1YiI6IjY1N2YyOGFmOGYyNmJjNTk0Yjc1MTdkZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.QdgbHJcKD5gQ3tHdkQleN-4wL07NvlB0b1YAC2cOdvw'
   }
 };
+
+export const  IMG_CDN_URL = "https://image.tmdb.org/t/p/w780/"

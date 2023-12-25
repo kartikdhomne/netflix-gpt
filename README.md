@@ -29,6 +29,13 @@
 - Update Store with Trailer video Data
 - Embedded youtube video and make it autoplay & mute
 - Tailwind Classes to make Main container awesome
+- Build Secondary COMPONENT
+- Build Movie list
+- Build Movie Cards
+- TMDB API Image CDN URL 
+- Made Browser good looking with tailwind
+- Made custom hooks for popular, trending, upcoming movies
+
 
 
 - <React.StrictMode> -- Makes 2 api calls at once to check inconsistency during API calls
